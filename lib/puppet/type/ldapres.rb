@@ -6,6 +6,10 @@ Puppet::Type.newtype(:ldapres) do
     desc "The DN of the ldapres we're working on"
   end
 
+  newparam(:objectclass)  do
+    desc "Object class of DN being manipulated"
+  end
+
   newparam(:binddn) do
     desc "DN to bind to the LDAP server with"
   end
