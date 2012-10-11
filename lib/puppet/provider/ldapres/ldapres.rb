@@ -99,6 +99,30 @@ Puppet::Type.type(:ldapres).provide :default do
       end
     end
 
-    puts "I am the monarch of the sea: " + (changed ? "true" : "false")
+    # If we changed something, produce a modification to apply
+    if changed then
+      modarray = []
+      @property_hash.each do |key, value|
+        key = key.to_s
+        if (key == "objectclass") then
+          key = "objectClass"
+        end
+
+        mod = LDAP::Mod.new(LDAP::LDAP_MOD_REPLACE, key, [value])
+        modarray = modarray << mod
+      end
+
+      # Apply it
+      puts "I am the monarch of the sea"
+      begin
+        @conn.modify(@resource[:dn], modarray)
+      rescue LDAP::ResultError
+        err = @conn.err2string(@conn.err)
+        unconnect
+        raise Puppet::Error, "Couldn't modify LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
+      end
+      puts "The ruler of the queens navy"
+    end
+
   end
 end
