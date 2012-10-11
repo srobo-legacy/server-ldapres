@@ -49,4 +49,17 @@ Puppet::Type.type(:ldapres).provide :default do
     unconnect
     return true
   end
+
+  def create
+    getconnected
+    themod = LDAP::Mod.new(LDAP::LDAP_MOD_ADD, "objectClass", [@resource[:objectclass]])
+    begin
+      @conn.add(@resource[:dn], [themod])
+    rescue LDAP::ResultError
+      err = @conn.err2string(@conn.err)
+      unconnect
+      raise Puppet::Error, "Couldn't create LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
+    end
+    unconnect
+  end
 end
