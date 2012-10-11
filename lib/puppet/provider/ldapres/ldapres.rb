@@ -6,6 +6,7 @@ Puppet::Type.type(:ldapres).provide :default do
   def getconnected
     @conn = LDAP::Conn.new(host=@resource[:ldapserverhost],
                            port=Integer(@resource[:ldapserverport]))
+    @conn.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
     @conn.bind(dn=@resource[:binddn], password=@resource[:bindpw],
                method=LDAP::LDAP_AUTH_SIMPLE)
   end
