@@ -3,11 +3,6 @@ class Puppet::Provider::Ldapres < Puppet::Provider
     puts "I'm covered in bees"
     puts args.inspect
   end
-
-  def self.prefetch(resources)
-    puts "lolprefetching"
-    puts resources.inspect
-  end
 end
 
 Puppet::Type.type(:ldapres).provide :default, :parent => Puppet::Provider::Ldapres do
