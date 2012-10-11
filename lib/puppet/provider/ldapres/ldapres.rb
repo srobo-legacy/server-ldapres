@@ -23,6 +23,9 @@ Puppet::Type.type(:ldapres).provide :default do
       @conn.search(@resource[:dn], LDAP::LDAP_SCOPE_BASE, '(objectclass=*)') do |entry|
         # It exists, success
         itexists = true
+        # Stash a copy/reference/whatever to the values
+        @resattrs = entry.attrs
+        @resvals = entry.to_hash
       end
     rescue LDAP::ResultError
       # If object wasn't found, then that's an expected result, it's absent.
