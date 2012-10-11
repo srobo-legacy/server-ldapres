@@ -6,7 +6,7 @@ Puppet::Type.newtype(:ldapres) do
     desc "The DN of the ldapres we're working on"
   end
 
-  newparam(:objectclass)  do
+  newproperty(:objectclass)  do
     desc "Object class of DN being manipulated"
   end
 
