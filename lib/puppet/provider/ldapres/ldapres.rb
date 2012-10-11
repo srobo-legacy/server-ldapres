@@ -15,4 +15,14 @@ Puppet::Type.type(:ldapres).provide :default do
     @conn.unbind
   end
 
+  def exists?
+    getconnected
+    itexists = false
+    @conn.search(@resource[:dn], LDAP::LDAP_SCOPE_BASE, '(objectclass=*)') do |entry|
+      itexists = true
+    end
+    unconnect
+    return itexists
+  end
+
 end
