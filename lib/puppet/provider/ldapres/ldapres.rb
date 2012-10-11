@@ -18,8 +18,16 @@ Puppet::Type.type(:ldapres).provide :default do
   def exists?
     getconnected
     itexists = false
-    @conn.search(@resource[:dn], LDAP::LDAP_SCOPE_BASE, '(objectclass=*)') do |entry|
-      itexists = true
+    begin
+      @conn.search(@resource[:dn], LDAP::LDAP_SCOPE_BASE, '(objectclass=*)') do |entry|
+        itexists = true
+      end
+    rescue LDAP::ResultError
+      if @conn.err != 32 then
+        err = @conn.err2string(@conn.err)
+        unconnect
+        raise Puppet::Error, "Couldn't search for LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
+      end
     end
     unconnect
     return itexists
