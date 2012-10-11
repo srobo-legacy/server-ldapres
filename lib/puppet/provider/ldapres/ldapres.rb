@@ -19,11 +19,15 @@ Puppet::Type.type(:ldapres).provide :default do
     getconnected
     itexists = false
     begin
+      # Search for any object with the given DN.
       @conn.search(@resource[:dn], LDAP::LDAP_SCOPE_BASE, '(objectclass=*)') do |entry|
+        # It exists, success
         itexists = true
       end
     rescue LDAP::ResultError
+      # If object wasn't found, then that's an expected result, it's absent.
       if @conn.err != 32 then
+        # All other errors are proper failures.
         err = @conn.err2string(@conn.err)
         unconnect
         raise Puppet::Error, "Couldn't search for LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
