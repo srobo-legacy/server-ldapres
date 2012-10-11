@@ -78,4 +78,27 @@ Puppet::Type.type(:ldapres).provide :default do
   end
 
   mk_resource_methods
+
+  def flush
+    # This is the point at which we take all of the properties we contain,
+    # and flush them into the actual ldap record.
+    changed = false
+    @property_hash.each do |key, value|
+      if key == :objectclass then
+        key = :objectClass # don't ask
+      end
+
+      key = key.to_s
+
+      if @resvals.member? key then
+        if ! @resvals[key].include?(value) then
+          changed = true
+        end
+      else
+        changed = true
+      end
+    end
+
+    puts "I am the monarch of the sea: " + (changed ? "true" : "false")
+  end
 end
