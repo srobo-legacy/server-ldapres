@@ -76,4 +76,6 @@ Puppet::Type.type(:ldapres).provide :default do
     end
     unconnect
   end
+
+  mk_resource_methods
 end
