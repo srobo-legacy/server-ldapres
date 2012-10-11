@@ -25,4 +25,16 @@ Puppet::Type.type(:ldapres).provide :default do
     return itexists
   end
 
+  def destroy
+    getconnected
+    begin
+      @conn.delete(@resource[:dn])
+    rescue LDAP::ResultError
+      raise Puppet::Error, "Couldn't delete LDAP resource with dn " + @resource[:dn]
+      unconnect
+      return false
+    end
+    unconnect
+    return true
+  end
 end
