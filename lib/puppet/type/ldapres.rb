@@ -20,9 +20,11 @@ Puppet::Type.newtype(:ldapres) do
 
   newparam(:ldapserverhost) do
     desc "Hostname of ldap server to connect to"
+    defaultto 'localhost'
   end
 
   newparam(:ldapserverport) do
     desc "Port number of ldap server we're connecting to"
+    defaultto '389'
   end
 end
