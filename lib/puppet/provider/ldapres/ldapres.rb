@@ -30,9 +30,8 @@ Puppet::Type.type(:ldapres).provide :default do
     begin
       @conn.delete(@resource[:dn])
     rescue LDAP::ResultError
-      raise Puppet::Error, "Couldn't delete LDAP resource with dn " + @resource[:dn]
       unconnect
-      return false
+      raise Puppet::Error, "Couldn't delete LDAP resource with dn " + @resource[:dn]
     end
     unconnect
     return true
