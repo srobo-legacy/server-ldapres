@@ -114,7 +114,6 @@ Puppet::Type.type(:ldapres).provide :default do
       end
 
       # Apply it
-      puts "I am the monarch of the sea"
       begin
         @conn.modify(@resource[:dn], modarray)
       rescue LDAP::ResultError
@@ -122,7 +121,6 @@ Puppet::Type.type(:ldapres).provide :default do
         unconnect
         raise Puppet::Error, "Couldn't modify LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
       end
-      puts "The ruler of the queens navy"
 
       unconnect
     end
