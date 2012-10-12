@@ -101,6 +101,7 @@ Puppet::Type.type(:ldapres).provide :default do
 
     # If we changed something, produce a modification to apply
     if changed then
+      getconnected
       modarray = []
       @property_hash.each do |key, value|
         key = key.to_s
@@ -122,6 +123,8 @@ Puppet::Type.type(:ldapres).provide :default do
         raise Puppet::Error, "Couldn't modify LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
       end
       puts "The ruler of the queens navy"
+
+      unconnect
     end
 
   end
