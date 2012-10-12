@@ -10,6 +10,14 @@ Puppet::Type.newtype(:ldapres) do
     desc "Object class of DN being manipulated"
   end
 
+  newproperty(:cn)  do
+    desc "Common name of LDAP resource"
+  end
+
+  newproperty(:sn)  do
+    desc "Surname of inetOrgPerson"
+  end
+
   newparam(:binddn) do
     desc "DN to bind to the LDAP server with"
   end
