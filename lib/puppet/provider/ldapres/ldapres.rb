@@ -28,6 +28,9 @@ Puppet::Type.type(:ldapres).provide :default do
         @resvals = entry.to_hash
         @resvals.each do |key, value|
           key = key.to_sym
+          if key == :objectClass then
+            key = :objectclass
+          end
           @property_hash[key] = value[0]
         end
       end
