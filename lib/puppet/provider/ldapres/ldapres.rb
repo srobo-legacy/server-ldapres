@@ -26,6 +26,10 @@ Puppet::Type.type(:ldapres).provide :default do
         # Stash a copy/reference/whatever to the values
         @resattrs = entry.attrs
         @resvals = entry.to_hash
+        @resvals.each do |key, value|
+          key = key.to_sym
+          @property_hash[key] = value[0]
+        end
       end
     rescue LDAP::ResultError
       # If object wasn't found, then that's an expected result, it's absent.
