@@ -15,6 +15,20 @@ Puppet::Type.type(:ldapres).provide :default do
     @conn.unbind
   end
 
+  def create_mod_array(input)
+    modarray = []
+    input.each do |key, value|
+      key = key.to_s
+      if (key == "objectclass") then
+        key = "objectClass"
+      end
+
+      mod = LDAP::Mod.new(LDAP::LDAP_MOD_REPLACE, key, [value])
+      modarray = modarray << mod
+    end
+    return modarray
+  end
+
   def exists?
     getconnected
     itexists = false
@@ -109,16 +123,7 @@ Puppet::Type.type(:ldapres).provide :default do
     # If we changed something, produce a modification to apply
     if changed then
       getconnected
-      modarray = []
-      @property_hash.each do |key, value|
-        key = key.to_s
-        if (key == "objectclass") then
-          key = "objectClass"
-        end
-
-        mod = LDAP::Mod.new(LDAP::LDAP_MOD_REPLACE, key, [value])
-        modarray = modarray << mod
-      end
+      modarray = create_mod_array(@property_hash)
 
       # Apply it
       begin
