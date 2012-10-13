@@ -1,12 +1,3 @@
-# All properties are in fact arrays of properties.
-def munger(value)
-  if value.kind_of?(Array)
-    return value
-  else
-    return [value]
-  end
-end
-
 Puppet::Type.newtype(:ldapres) do
   @doc = "Insert here: documentation."
 	ensurable
@@ -15,44 +6,40 @@ Puppet::Type.newtype(:ldapres) do
     desc "The DN of the ldapres we're working on"
   end
 
-  newproperty(:objectclass)  do
+  newproperty(:objectclass, :array_matching => :all)  do
     desc "Object class of DN being manipulated"
-    munge do |value|munger(value) end
   end
 
-  newproperty(:cn)  do
+  newproperty(:cn, :array_matching => :all)  do
     desc "Common name of LDAP resource"
-    munge do |value|munger(value) end
   end
 
-  newproperty(:sn)  do
+  newproperty(:sn, :array_matching => :all)  do
     desc "Surname of inetOrgPerson"
-    munge do |value|munger(value) end
   end
 
-  newproperty(:uid) do
+  newproperty(:uid, :array_matching => :all) do
     desc "Username of inetOrgPerson"
-    munge do |value|munger(value) end
   end
 
-  newproperty(:mail) do
+  newproperty(:mail, :array_matching => :all) do
     desc "Email address of inetOrgPerson"
-    munge do |value|munger(value) end
   end
 
-  newproperty(:uidPerson) do
-    desc "UID number of uidObject"
-    munge do |value|munger(value) end
-  end
-
-  newproperty(:loginShell) do
+  newproperty(:loginshell, :array_matching => :all) do
     desc "Login shell path of posixAccount"
-    munge do |value|munger(value) end
   end
 
-  newproperty(:gidNumber) do
+  newproperty(:uidnumber, :array_matching => :all) do
+    desc "UID of posixAccount"
+  end
+
+  newproperty(:gidnumber, :array_matching => :all) do
     desc "Primary group ID of posixAccount"
-    munge do |value|munger(value) end
+  end
+
+  newproperty(:homedirectory, :array_matching => :all) do
+    desc "Home directory of a posixAccount"
   end
 
   newparam(:binddn) do
