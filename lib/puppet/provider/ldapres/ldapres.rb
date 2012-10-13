@@ -45,7 +45,7 @@ Puppet::Type.type(:ldapres).provide :default do
           if key == :objectClass then
             key = :objectclass
           end
-          @property_hash[key] = value[0]
+          @property_hash[key] = value
         end
       end
     rescue LDAP::ResultError
@@ -61,11 +61,11 @@ Puppet::Type.type(:ldapres).provide :default do
 
     if defined?(@resvals) then
       # Everything should have an objectClass,
-      objclass = @resvals['objectClass'][0]
+      objclass = @resvals['objectClass']
       expected = @resource[:objectclass]
       # Does it match what puppet expects?
       if objclass != expected then
-        raise Puppet::Error, "LDAP resource " + @resource[:dn] + " has objectclass '" + objclass + "', but we expected class '" + expected + "'. Cowardly refusing to delete existing data."
+        raise Puppet::Error, "LDAP resource " + @resource[:dn] + " has objectclass '" + objclass.to_s + "', but we expected class '" + expected.to_s + "'. Cowardly refusing to delete existing data."
       end
     end
 
