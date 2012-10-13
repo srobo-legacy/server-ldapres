@@ -18,6 +18,26 @@ Puppet::Type.newtype(:ldapres) do
     desc "Surname of inetOrgPerson"
   end
 
+  newproperty(:uid) do
+    desc "Username of inetOrgPerson"
+  end
+
+  newproperty(:mail) do
+    desc "Email address of inetOrgPerson"
+  end
+
+  newproperty(:uidPerson) do
+    desc "UID number of uidObject"
+  end
+
+  newproperty(:loginShell) do
+    desc "Login shell path of posixAccount"
+  end
+
+  newproperty(:gidNumber) do
+    desc "Primary group ID of posixAccount"
+  end
+
   newparam(:binddn) do
     desc "DN to bind to the LDAP server with"
   end
