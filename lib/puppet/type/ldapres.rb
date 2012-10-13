@@ -1,3 +1,12 @@
+# All properties are in fact arrays of properties.
+def munger(value)
+  if value.kind_of?(Array)
+    return value
+  else
+    return [value]
+  end
+end
+
 Puppet::Type.newtype(:ldapres) do
   @doc = "Insert here: documentation."
 	ensurable
@@ -8,34 +17,42 @@ Puppet::Type.newtype(:ldapres) do
 
   newproperty(:objectclass)  do
     desc "Object class of DN being manipulated"
+    munge do |value|munger(value) end
   end
 
   newproperty(:cn)  do
     desc "Common name of LDAP resource"
+    munge do |value|munger(value) end
   end
 
   newproperty(:sn)  do
     desc "Surname of inetOrgPerson"
+    munge do |value|munger(value) end
   end
 
   newproperty(:uid) do
     desc "Username of inetOrgPerson"
+    munge do |value|munger(value) end
   end
 
   newproperty(:mail) do
     desc "Email address of inetOrgPerson"
+    munge do |value|munger(value) end
   end
 
   newproperty(:uidPerson) do
     desc "UID number of uidObject"
+    munge do |value|munger(value) end
   end
 
   newproperty(:loginShell) do
     desc "Login shell path of posixAccount"
+    munge do |value|munger(value) end
   end
 
   newproperty(:gidNumber) do
     desc "Primary group ID of posixAccount"
+    munge do |value|munger(value) end
   end
 
   newparam(:binddn) do
