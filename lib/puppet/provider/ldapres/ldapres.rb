@@ -23,7 +23,7 @@ Puppet::Type.type(:ldapres).provide :default do
         key = "objectClass"
       end
 
-      mod = LDAP::Mod.new(LDAP::LDAP_MOD_REPLACE, key, [value])
+      mod = LDAP::Mod.new(LDAP::LDAP_MOD_REPLACE, key, value)
       modarray = modarray << mod
     end
     return modarray
