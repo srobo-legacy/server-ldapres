@@ -64,6 +64,7 @@ Puppet::Type.type(:ldapres).provide :default do
           if key == :objectClass then
             key = :objectclass
           end
+          key = key.downcase
           @property_hash[key] = value
         end
       end
