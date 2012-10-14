@@ -46,6 +46,10 @@ Puppet::Type.newtype(:ldapres) do
     desc "Password record of various account objects"
   end
 
+  newproperty(:memberuid, :array_matching => :all) do
+    desc "Member field of posixAccounts"
+  end
+
   newparam(:binddn) do
     desc "DN to bind to the LDAP server with"
   end
