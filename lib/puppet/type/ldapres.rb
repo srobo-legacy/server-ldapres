@@ -42,6 +42,10 @@ Puppet::Type.newtype(:ldapres) do
     desc "Home directory of a posixAccount"
   end
 
+  newproperty(:userpassword, :array_matching => :all) do
+    desc "Password record of various account objects"
+  end
+
   newparam(:binddn) do
     desc "DN to bind to the LDAP server with"
   end
