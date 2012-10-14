@@ -126,16 +126,15 @@ Puppet::Type.type(:ldapres).provide :default do
       getconnected
       # Apply it
 
-      if @needscreating == true then
-        # Fetch any specified properties out of the parameter array.
-        # These don't make it into @property_hash for some unknown reason.
-        toconvert = {}
-        parameters = @resource.parameters
-        parameters.each do |key, value|
-          if value.is_a?(Puppet::Property) and key != :ensure then
-            toconvert[key.to_s] = value.should
-          end
+      toconvert = {}
+      parameters = @resource.parameters
+      parameters.each do |key, value|
+        if value.is_a?(Puppet::Property) and key != :ensure then
+          toconvert[key.to_s] = value.should
         end
+      end
+
+      if @needscreating == true then
         modarray = create_mod_array(toconvert)
 
         begin
@@ -146,7 +145,8 @@ Puppet::Type.type(:ldapres).provide :default do
           raise Puppet::Error, "Couldn't create LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
         end
       else
-        modarray = create_mod_array(@property_hash)
+        modarray = create_mod_array(toconvert)
+        modarray = del_missing_properties(modarray, toconvert)
         begin
           @conn.modify(@resource[:dn], modarray)
         rescue LDAP::ResultError
