@@ -1,0 +1,1 @@
+Outstanding bug: if you delete a property from an ldap resource, it doesn't necessarly get deleted from ldap until the resource next gets modified. Which is bad (TM).
