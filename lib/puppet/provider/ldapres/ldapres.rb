@@ -75,16 +75,6 @@ Puppet::Type.type(:ldapres).provide :default do
     end
     unconnect
 
-    if defined?(@resvals) then
-      # Everything should have an objectClass,
-      objclass = @resvals['objectClass']
-      expected = @resource[:objectclass]
-      # Does it match what puppet expects?
-      if objclass != expected then
-        raise Puppet::Error, "LDAP resource " + @resource[:dn] + " has objectclass '" + objclass.to_s + "', but we expected class '" + expected.to_s + "'. Cowardly refusing to delete existing data."
-      end
-    end
-
     return itexists
   end
 
