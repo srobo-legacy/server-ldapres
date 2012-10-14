@@ -98,6 +98,10 @@ Puppet::Type.type(:ldapres).provide :default do
   mk_resource_methods
 
   def flush
+    if @resource[:ensure] == :absent then
+      return
+    end
+
     # This is the point at which we take all of the properties we contain,
     # and flush them into the actual ldap record.
     changed = false
