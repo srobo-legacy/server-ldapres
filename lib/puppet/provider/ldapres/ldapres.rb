@@ -29,6 +29,22 @@ Puppet::Type.type(:ldapres).provide :default do
     return modarray
   end
 
+  # Add ldap modifications that delete certain attributes and put them into
+  # the modarray array. The attributes deleted are those that exist (i.e., are
+  # in @resvals, but are not in the array of values being set, refhash.
+  def del_missing_properties(modarray, refhash)
+    @resvals.each do |key, value|
+      if key == "dn" or key == "objectClass" then
+        next
+      end
+      if ! refhash.keys.include?(key) then
+        mod = LDAP::Mod.new(LDAP::LDAP_MOD_DELETE, key, value)
+        modarray = modarray << mod
+      end
+    end
+    return modarray
+  end
+
   def exists?
     getconnected
     itexists = false
