@@ -4,6 +4,12 @@ Puppet::Type.type(:ldapres).provide :default do
   confine :true => Puppet.features.ldap?
 
   def getconnected
+    if @resource[:ldapserverhost] == nil or
+       @resource[:ldapserverport] == nil or
+       @resource[:binddn] == nil or
+       @resource[:bindpw] == nil then
+       raise Puppet::Error, "Can't connect to ldap without {hostname,port,binddn,bindpw} being defined"
+    end
     @conn = LDAP::Conn.new(host=@resource[:ldapserverhost],
                            port=Integer(@resource[:ldapserverport]))
     @conn.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
