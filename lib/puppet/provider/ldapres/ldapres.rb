@@ -102,7 +102,26 @@ Puppet::Type.type(:ldapres).provide :default do
   end
 
   def create
-    @needscreating = true
+    getconnected
+
+    toconvert = {}
+    parameters = @resource.parameters
+    parameters.each do |key, value|
+      if value.is_a?(Puppet::Property) and key != :ensure then
+        toconvert[key.to_s] = value.should
+      end
+    end
+
+    modarray = create_mod_array(toconvert)
+
+    begin
+      @conn.add(@resource[:dn], modarray)
+    rescue LDAP::ResultError
+      err = @conn.err2string(@conn.err)
+      unconnect
+      raise Puppet::Error, "Couldn't create LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
+    end
+    unconnect
   end
 
   mk_resource_methods
@@ -132,7 +151,7 @@ Puppet::Type.type(:ldapres).provide :default do
     end
 
     # If we changed something, produce a modification to apply
-    if changed or @needscreating == true then
+    if changed then
       getconnected
       # Apply it
 
@@ -144,30 +163,17 @@ Puppet::Type.type(:ldapres).provide :default do
         end
       end
 
-      if @needscreating == true then
-        modarray = create_mod_array(toconvert)
-
-        begin
-          @conn.add(@resource[:dn], modarray)
-        rescue LDAP::ResultError
-          err = @conn.err2string(@conn.err)
-          unconnect
-          raise Puppet::Error, "Couldn't create LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
-        end
-      else
-        modarray = create_mod_array(toconvert)
-        modarray = del_missing_properties(modarray, toconvert)
-        begin
-          @conn.modify(@resource[:dn], modarray)
-        rescue LDAP::ResultError
-          err = @conn.err2string(@conn.err)
-          unconnect
-          raise Puppet::Error, "Couldn't modify LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
-        end
+      modarray = create_mod_array(toconvert)
+      modarray = del_missing_properties(modarray, toconvert)
+      begin
+        @conn.modify(@resource[:dn], modarray)
+      rescue LDAP::ResultError
+        err = @conn.err2string(@conn.err)
+        unconnect
+        raise Puppet::Error, "Couldn't modify LDAP resource with dn " + @resource[:dn] + " because '" + err + "'"
       end
 
       unconnect
     end
-
   end
 end
