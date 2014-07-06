@@ -1,3 +1,6 @@
+
+require 'ldap'
+
 Puppet::Type.type(:ldapres).provide :default do
   desc "Default provider for ldapres resources"
 
